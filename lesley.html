@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesley Ledwaba | Terminal Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== GLOBAL STYLES ===== */
+        :root {
+            --editor-bg: #0f172a;
+            --editor-border: #1e293b;
+            --terminal-bg: #1e293b;
+            --terminal-header: #334155;
+            --code-green: #10b981;
+            --code-purple: #8b5cf6;
+            --code-blue: #60a5fa;
+            --code-yellow: #fbbf24;
+            --code-red: #f87171;
+            --code-comment: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Fira Code', 'Courier New', monospace;
+        }
+
+        body {
+            background-color: var(--editor-bg);
+            color: #f1f5f9;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ===== TERMINAL WINDOW ===== */
+        .terminal {
+            background: var(--terminal-bg);
+            border-radius: 8px;
+            margin: 20px auto;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+        }
+
+        .terminal-header {
+            background: var(--terminal-header);
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--editor-border);
+            cursor: pointer;
+        }
+
+        .terminal-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .terminal-btn.red { background: #ef4444; }
+        .terminal-btn.yellow { background: #fbbf24; }
+        .terminal-btn.green { background: #10b981; }
+
+        .terminal-title {
+            margin-left: 15px;
+            color: var(--code-comment);
+            font-size: 0.8rem;
+        }
+
+        .terminal-body {
+            padding: 30px;
+            font-family: 'Fira Code', monospace;
+            display: none;
+        }
+
+        .terminal.active .terminal-body {
+            display: block;
+        }
+
+        .code-line {
+            display: flex;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .line-number {
+            color: var(--code-comment);
+            width: 40px;
+            text-align: right;
+            padding-right: 15px;
+            user-select: none;
+        }
+
+        .code-text {
+            flex: 1;
+        }
+
+        .code-comment { color: var(--code-comment); }
+        .code-keyword { color: var(--code-purple); }
+        .code-function { color: var(--code-blue); }
+        .code-string { color: var(--code-green); }
+        .code-var { color: var(--code-yellow); }
+        .code-operator { color: var(--code-red); }
+
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background: var(--code-green);
+            animation: blink 1s infinite;
+            vertical-align: middle;
+            margin-left: 5px;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* ===== CLEAN HERO SECTION ===== */
+        .hero-container {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 8px;
+            padding: 60px;
+            margin: 40px auto;
+            max-width: 800px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .hero-name {
+            color: var(--code-blue);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .hero-title {
+            color: var(--code-green);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        .hero-desc {
+            color: #f1f5f9;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Profile Image Styles */
+        .profile-image-container {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 25px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid var(--code-purple);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ===== SERVICES SECTION ===== */
+        .service-card {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid var(--editor-border);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .service-title {
+            color: var(--code-blue);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .service-title i {
+            margin-right: 10px;
+            font-size: 1.5rem;
+            color: var(--code-purple);
+        }
+
+        .service-desc {
+            color: var(--code-comment);
+            margin-bottom: 15px;
+        }
+
+        .service-features {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        .service-features li {
+            margin-bottom: 8px;
+            color: var(--code-comment);
+        }
+
+        .service-features li::before {
+            content: "▹";
+            color: var(--code-purple);
+            margin-right: 10px;
+        }
+
+        /* ===== SKILL METERS ===== */
+        .skill-meter {
+            margin-bottom: 20px;
+        }
+
+        .skill-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .skill-name {
+            color: var(--code-green);
+        }
+
+        .skill-percent {
+            color: var(--code-comment);
+        }
+
+        .meter-bar {
+            height: 8px;
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .meter-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--code-purple), var(--code-blue));
+            border-radius: 4px;
+        }
+
+        /* ===== CONTENT SECTIONS ===== */
+        .content-section {
+            background: var(--terminal-bg);
+            border-radius: 8px;
+            margin: 20px auto;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+        }
+
+        .section-header {
+            background: var(--terminal-header);
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--editor-border);
+            cursor: pointer;
+        }
+
+        .section-content {
+            padding: 30px;
+            display: none;
+        }
+
+        .content-section.active .section-content {
+            display: block;
+        }
+
+        /* About Me Section */
+        .about-me {
+            background: linear-gradient(135deg, #0a0c1f, #12162e);
+            color: #f1f5f9;
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        .bio {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .skill-category h3 {
+            color: var(--code-green);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .skill-list {
+            list-style: none;
+        }
+
+        .skill-list li {
+            margin-bottom: 8px;
+            color: var(--code-comment);
+        }
+
+        .skill-list li::before {
+            content: "▹";
+            color: var(--code-purple);
+            margin-right: 10px;
+        }
+
+        /* Project cards */
+        .project-card {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid var(--editor-border);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .project-title {
+            color: var(--code-blue);
+            margin-bottom: 10px;
+        }
+
+        .project-desc {
+            color: var(--code-comment);
+            margin-bottom: 15px;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .project-tag {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--code-purple);
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+        }
+
+        /* Contact form */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--code-blue);
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--editor-border);
+            border-radius: 4px;
+            color: #f1f5f9;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: var(--code-purple);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Fira Code', monospace;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: var(--code-blue);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--code-comment);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--code-comment);
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: var(--code-purple);
+            color: white;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .hero-container {
+                padding: 40px 20px;
+            }
+            
+            .hero-name {
+                font-size: 2rem;
+            }
+            
+            .hero-title {
+                font-size: 1.2rem;
+            }
+            
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .about-me, .section-content {
+                padding: 25px;
+            }
+            
+            .profile-image-container {
+                width: 120px;
+                height: 120px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-name {
+                font-size: 1.8rem;
+            }
+            
+            .hero-title {
+                font-size: 1.1rem;
+            }
+            
+            .hero-desc {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Terminal Window -->
+    <div class="container">
+        <div class="terminal active" id="mainTerminal">
+            <div class="terminal-header">
+                <div class="terminal-btn red"></div>
+                <div class="terminal-btn yellow"></div>
+                <div class="terminal-btn green"></div>
+                <span class="terminal-title">Lesley-Ledwaba-portfolio - bash - 80x24</span>
+            </div>
+            <div class="terminal-body">
+                <div class="code-line">
+                    <span class="line-number">1</span>
+                    <span class="code-keyword">const</span> <span class="code-var">developer</span> <span class="code-operator">=</span> <span class="code-operator">[</span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">2</span>
+                    <span class="code-text">  <span class="code-string">name</span><span class="code-operator">:</span> <span class="code-string">"Lesley Ledwaba"</span><span class="code-operator">,</span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">3</span>
+                    <span class="code-text">  <span class="code-string">role</span><span class="code-operator">:</span> <span class="code-string">"Fullstack Developer"</span><span class="code-operator">,</span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">4</span>
+                    <span class="code-text">  <span class="code-string">specialties</span><span class="code-operator">:</span> <span class="code-operator">[</span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">5</span>
+                    <span class="code-text">    <span class="code-string">"JavaScript/TypeScript"</span><span class="code-operator">,</span> <span class="code-string">"Python"</span><span class="code-operator">,</span> <span class="code-string">"TensorFlow"</span><span class="code-operator">,</span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">6</span>
+                    <span class="code-text">    <span class="code-string">"Data Visualization"</span><span class="code-operator">,</span> <span class="code-string">"Responsive Design"</span><span class="code-operator">,</span> <span class="code-string">"SEO Optimization"</span><span class="code-operator">,</span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">7</span>
+                    <span class="code-text">    <span class="code-string">"Machine Learning"</span><span class="code-operator">,</span> <span class="code-string">"SQL/NoSQL"</span><span class="code-operator">,</span> <span class="code-string">"API Development"</span><span class="code-operator">,</span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">8</span>
+                    <span class="code-text">    <span class="code-string">"Cloud Services"</span><span class="code-operator">,</span> <span class="code-string">"Git/GitHub"</span><span class="code-operator">,</span> <span class="code-string">"Business Intelligence"</span><span class="code-operator">,</span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">9</span>
+                    <span class="code-text">    <span class="code-string">"Project Management"</span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">10</span>
+                    <span class="code-text">  <span class="code-operator">]</span><span class="code-operator">,</span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">11</span>
+                    <span class="code-comment">// Welcome to my interactive portfolio</span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">12</span>
+                    <span class="code-keyword">function</span> <span class="code-function">explore</span><span class="code-operator">(</span><span class="code-operator">)</span> <span class="code-operator">{</span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">13</span>
+                    <span class="code-text">  <span class="code-keyword">return</span> <span class="code-string">"Click the section headers below"</span><span class="code-operator">;</span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">14</span>
+                    <span class="code-operator">}</span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">15</span>
+                    <span class="code-comment">// Currently viewing: main terminal<span class="cursor"></span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Clean Hero Section with Profile Picture -->
+    <div class="container">
+        <div class="hero-container">
+            <!-- Profile Image Container -->
+            <div class="profile-image-container">
+                <img src="logo.jpg" alt="Lesley Ledwaba" class="profile-image">
+            </div>
+            
+            <h1 class="hero-name">Lesley Ledwaba</h1>
+            <h2 class="hero-title">Fullstack Software Engineer</h2>
+            <p class="hero-desc">
+                I build immersive digital experiences that blend innovative design with cutting-edge technologies to create meaningful user interactions.
+            </p>
+        </div>
+    </div>
+
+    <!-- Services Section -->
+    <div class="container">
+        <div class="content-section" id="servicesSection">
+            <div class="section-header">
+                <div class="terminal-btn red"></div>
+                <div class="terminal-btn yellow"></div>
+                <div class="terminal-btn green"></div>
+                <span class="terminal-title">services.js - bash - 80x24</span>
+            </div>
+            <div class="section-content">
+                <div class="code-line">
+                    <span class="line-number">1</span>
+                    <span class="code-comment">// Available Services</span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">2</span>
+                    <span class="code-keyword">const</span> <span class="code-var">services</span> <span class="code-operator">=</span> <span class="code-operator">[</span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">3</span>
+                    <span class="code-text">  <span class="code-operator">{</span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">4</span>
+                    <span class="code-text">    <span class="code-string">title</span><span class="code-operator">:</span> <span class="code-string">"Generative AI Solutions"</span><span class="code-operator">,</span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">5</span>
+                    <span class="code-text">    <span class="code-string">desc</span><span class="code-operator">:</span> <span class="code-string">"Implementing cutting-edge AI technology..."</span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">6</span>
+                    <span class="code-text">  <span class="code-operator">}</span><span class="code-operator">,</span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">7</span>
+                    <span class="code-text">  <span class="code-comment">// More services...</span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">8</span>
+                    <span class="code-text"><span class="code-operator">]</span><span class="code-operator">;</span></span>
+                </div>
+                
+                <h2 class="section-heading">Specialized expertise to help your business succeed in the digital era</h2>
+                
+                <div class="service-card">
+                    <h3 class="service-title"><i class="fas fa-robot"></i> Generative AI Solutions</h3>
+                    <p class="service-desc">Implementing cutting-edge AI technology to generate content, automate processes, and create innovative solutions for your business.</p>
+                    <ul class="service-features">
+                        <li>AI-powered content generation</li>
+                        <li>Machine learning integration</li>
+                        <li>Natural language processing</li>
+                        <li>Predictive analytics</li>
+                    </ul>
+                </div>
+                
+                <div class="service-card">
+                    <h3 class="service-title"><i class="fas fa-code"></i> Web Development & Design</h3>
+                    <p class="service-desc">Creating modern, responsive websites and applications with focus on user experience, performance, and accessibility.</p>
+                    <ul class="service-features">
+                        <li>Responsive web design</li>
+                        <li>Custom web applications</li>
+                        <li>E-commerce solutions</li>
+                        <li>Performance optimization</li>
+                    </ul>
+                </div>
+                
+                <div class="service-card">
+                    <h3 class="service-title"><i class="fas fa-chart-bar"></i> Data Analysis</h3>
+                    <p class="service-desc">Transforming raw data into actionable insights through advanced analytics, visualization, and reporting.</p>
+                    <ul class="service-features">
+                        <li>Data visualization</li>
+                        <li>Business intelligence</li>
+                        <li>Statistical analysis</li>
+                        <li>Custom reporting</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Me Section -->
+    <div class="container">
+        <div class="content-section" id="aboutSection">
+            <div class="section-header">
+                <div class="terminal-btn red"></div>
+                <div class="terminal-btn yellow"></div>
+                <div class="terminal-btn green"></div>
+                <span class="terminal-title">about.css - bash - 80x24</span>
+            </div>
+            <div class="section-content">
+                <div class="code-line">
+                    <span class="line-number">1</span>
+                    <span class="code-comment">/* About Lesley Ledwaba */</span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">2</span>
+                    <span class="code-keyword">.developer</span> <span class="code-operator">{</span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">3</span>
+                    <span class="code-text">  <span class="code-var">name</span><span class="code-operator">:</span> <span class="code-string">"Lesley Ledwaba"</span><span class="code-operator">;</span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">4</span>
+                    <span class="code-text">  <span class="code-var">role</span><span class="code-operator">:</span> <span class="code-string">"Fullstack Developer"</span><span class="code-operator">;</span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">5</span>
+                    <span class="code-text">  <span class="code-var">experience</span><span class="code-operator">:</span> <span class="code-string">"5+ years"</span><span class="code-operator">;</span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">6</span>
+                    <span class="code-operator">}</span>
+                </div>
+                
+                <div class="about-me">
+                    <h2>About Me</h2>
+                    <p class="bio">
+                        I am a passionate fullstack software engineer with expertise in building modern, responsive web applications, generative AI solutions and data analysis. with years of experience in the tech industry i leverage on my knowledge of cutting-edge technologies to achieve my client's goals.
+                        My approach combines technical expertise with a deep understanding of business needs, resulting in solutions that are not just technically sound but also aligned with your business objectives.
+                    </p>
+                    <p class="bio">
+                        With a background in both design and development, I bridge the gap between aesthetics and functionality, 
+                        delivering solutions that are both beautiful and efficient.
+                    </p>
+                    
+                    <h3 class="skill-section-title">Technical Skills</h3>
+                    <p class="skill-section-desc">A detailed breakdown of my expertise in different technology domains</p>
+                    
+                    <div class="skills-grid">
+                        <div class="skill-category">
+                            <h3>AI & Machine Learning</h3>
+                            <div class="skill-meter">
+                                <div class="skill-info">
+                                    <span class="skill-name">Generative AI</span>
+                                    <span class="skill-percent">90%</span>
+                                </div>
+                                <div class="meter-bar">
+                                    <div class="meter-progress" style="width: 90%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-meter">
+                                <div class="skill-info">
+                                    <span class="skill-name">Natural Language Processing</span>
+                                    <span class="skill-percent">85%</span>
+                                </div>
+                                <div class="meter-bar">
+                                    <div class="meter-progress" style="width: 85%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-meter">
+                                <div class="skill-info">
+                                    <span class="skill-name">Machine Learning</span>
+                                    <span class="skill-percent">80%</span>
+                                </div>
+                                <div class="meter-bar">
+                                    <div class="meter-progress" style="width: 80%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-meter">
+                                <div class="skill-info">
+                                    <span class="skill-name">AI Integration</span>
+                                    <span class="skill-percent">85%</span>
+                                </div>
+                                <div class="meter-bar">
+                                    <div class="meter-progress" style="width: 85%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="skill-category">
+                            <h3>Web Development</h3>
+                            <div class="skill-meter">
+                                <div class="skill-info">
+                                    <span class="skill-name">HTML/CSS/JavaScript</span>
+                                    <span class="skill-percent">95%</span>
+                                </div>
+                                <div class="meter-bar">
+                                    <div class="meter-progress" style="width: 95%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-meter">
+                                <div class="skill-info">
+                                    <span class="skill-name">React.js</span>
+                                    <span class="skill-percent">90%</span>
+                                </div>
+                                <div class="meter-bar">
+                                    <div class="meter-progress" style="width: 90%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-meter">
+                                <div class="skill-info">
+                                    <span class="skill-name">Responsive Design</span>
+                                    <span class="skill-percent">90%</span>
+                                </div>
+                                <div class="meter-bar">
+                                    <div class="meter-progress" style="width: 90%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-meter">
+                                <div class="skill-info">
+                                    <span class="skill-name">UI/UX Design</span>
+                                    <span class="skill-percent">85%</span>
+                                </div>
+                                <div class="meter-bar">
+                                    <div class="meter-progress" style="width: 85%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="skill-category">
+                            <h3>Data Analysis</h3>
+                            <div class="skill-meter">
+                                <div class="skill-info">
+                                    <span class="skill-name">Data Visualization</span>
+                                    <span class="skill-percent">85%</span>
+                                </div>
+                                <div class="meter-bar">
+                                    <div class="meter-progress" style="width: 85%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-meter">
+                                <div class="skill-info">
+                                    <span class="skill-name">Statistical Analysis</span>
+                                    <span class="skill-percent">80%</span>
+                                </div>
+                                <div class="meter-bar">
+                                    <div class="meter-progress" style="width: 80%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-meter">
+                                <div class="skill-info">
+                                    <span class="skill-name">Business Intelligence</span>
+                                    <span class="skill-percent">85%</span>
+                                </div>
+                                <div class="meter-bar">
+                                    <div class="meter-progress" style="width: 85%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-meter">
+                                <div class="skill-info">
+                                    <span class="skill-name">Data Modeling</span>
+                                    <span class="skill-percent">75%</span>
+                                </div>
+                                <div class="meter-bar">
+                                    <div class="meter-progress" style="width: 75%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Projects Section -->
+    <div class="container">
+        <div class="content-section" id="projectsSection">
+            <div class="section-header">
+                <div class="terminal-btn red"></div>
+                <div class="terminal-btn yellow"></div>
+                <div class="terminal-btn green"></div>
+                <span class="terminal-title">projects.js - bash - 80x24</span>
+            </div>
+            <div class="section-content">
+                <div class="code-line">
+                    <span class="line-number">1</span>
+                    <span class="code-comment">// Project Portfolio</span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">2</span>
+                    <span class="code-keyword">class</span> <span class="code-function">Project</span> <span class="code-operator">{</span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">3</span>
+                    <span class="code-text">  <span class="code-keyword">constructor</span><span class="code-operator">(</span><span class="code-var">name</span><span class="code-operator">,</span> <span class="code-var">tech</span><span class="code-operator">)</span> <span class="code-operator">{</span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">4</span>
+                    <span class="code-text">    <span class="code-keyword">this</span><span class="code-operator">.</span><span class="code-var">name</span> <span class="code-operator">=</span> <span class="code-var">name</span><span class="code-operator">;</span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">5</span>
+                    <span class="code-text">    <span class="code-keyword">this</span><span class="code-operator">.</span><span class="code-var">technologies</span> <span class="code-operator">=</span> <span class="code-var">tech</span><span class="code-operator">;</span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">6</span>
+                    <span class="code-text">  <span class="code-operator">}</span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">7</span>
+                    <span class="code-text"><span class="code-operator">}</span></span>
+                </div>
+                
+                <div class="project-card">
+                    <h3 class="project-title">SecureNLP Guardian - HIPAA/GDPR Compliant AI Platform</h3>
+                    <p class="project-desc">
+                        A comprehensive enterprise-grade compliance management system designed for healthcare AI applications. This platform demonstrates advanced security architecture and regulatory compliance frameworks required for processing sensitive data in highly regulated industries.
+
+Core Capabilities: • Compliance Dashboard - Real-time monitoring of HIPAA/GDPR compliance metrics with automated reporting • Encryption Management - AWS KMS integration with AES-256 encryption testing and key rotation protocols • Audit Trail System - Complete CloudTrail logging with searchable audit records and compliance reporting • Data Governance Tools - Automated GDPR "Right to Erasure" workflows with progress tracking • Security Architecture - Visual system mapping showing AWS infrastructure and data flow patterns • Performance Testing - Load testing frameworks supporting 10,000+ requests per minute • Gap Analysis Engine - Automated identification of compliance gaps with remediation recommendations
+
+Technical Implementation: Built with React/TypeScript, featuring a modern responsive interface using Tailwind CSS and shadcn/ui components. Integrates with AWS services including KMS for encryption, CloudTrail for auditing, and Bedrock for AI processing. Demonstrates best practices for security-first development in healthcare technology.
+
+Business Impact: Provides organizations with the tools needed to deploy AI systems in regulated environments while maintaining full compliance with healthcare data protection requirements. Essential for any company processing PHI or PII data.
+                    </p>
+                    <div class="project-tags">
+                        <span class="project-tag">React</span>
+                        <span class="project-tag">Node.js</span>
+                        <span class="project-tag">MongoDB</span>
+                        <span class="project-tag">Chart.js</span>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <h3 class="project-title">DataStream Dashboard</h3>
+                    <p class="project-desc">
+                        Real-Time Analytics Platform
+A cutting-edge data visualization dashboard built with modern web technologies, featuring real-time data streaming, interactive charts, and comprehensive analytics.
+
+Tech Stack:
+• Frontend: React, TypeScript, Tailwind CSS • Backend: Firebase (Firestore, Authentication) • Visualization: Recharts, Custom Chart Components • UI/UX: Shadcn/UI, Responsive Design, Dark/Light Mode
+
+Key Features:
+• Real-time data streaming with live updates • Multiple chart types (Line, Bar, Pie, Heatmap) • Google OAuth authentication • CSV/PDF export functionality • Time range filtering and data analysis • Fully responsive design • Professional dashboard layout
+
+Highlights:
+• Built with performance and scalability in mind • Clean, maintainable code architecture • Modern UI/UX best practices • Real-world application ready for production
+
+Perfect for:
+Data analysts, business intelligence teams, and anyone needing powerful real-time analytics visualization.
+                    </p>
+                    <div class="project-tags">
+                        <span class="project-tag">Vue.js</span>
+                        <span class="project-tag">Firebase</span>
+                        <span class="project-tag">Tailwind</span>
+                        <span class="project-tag">JavaScript</span>
+                        <span class="project-tag">API</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="container">
+        <div class="content-section" id="contactSection">
+            <div class="section-header">
+                <div class="terminal-btn red"></div>
+                <div class="terminal-btn yellow"></div>
+                <div class="terminal-btn green"></div>
+                <span class="terminal-title">contact.py - bash - 80x24</span>
+            </div>
+            <div class="section-content">
+                <div class="code-line">
+                    <span class="line-number">1</span>
+                    <span class="code-comment"># Contact Form Handler</span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">2</span>
+                    <span class="code-keyword">def</span> <span class="code-function">send_message</span><span class="code-operator">(</span><span class="code-var">name</span><span class="code-operator">,</span> <span class="code-var">email</span><span class="code-operator">,</span> <span class="code-var">message</span><span class="code-operator">)</span><span class="code-operator">:</span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">3</span>
+                    <span class="code-text">    <span class="code-comment"># Validate input</span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">4</span>
+                    <span class="code-text">    <span class="code-keyword">if</span> <span class="code-keyword">not</span> <span class="code-var">name</span> <span class="code-keyword">or</span> <span class="code-keyword">not</span> <span class="code-var">email</span> <span class="code-keyword">or</span> <span class="code-keyword">not</span> <span class="code-var">message</span><span class="code-operator">:</span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">5</span>
+                    <span class="code-text">        <span class="code-keyword">return</span> <span class="code-string">"error"</span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">6</span>
+                    <span class="code-text">    <span class="code-comment"># Process message...</span></span>
+                </div>
+                <div class="code-line">
+                    <span class="line-number">7</span>
+                    <span class="code-text">    <span class="code-keyword">return</span> <span class="code-string">"success"</span></span>
+                </div>
+                
+                <form>
+                    <div class="form-group">
+                        <label for="contact-name" class="form-label">Name</label>
+                        <input type="text" id="contact-name" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contact-email" class="form-label">Email</label>
+                        <input type="email" id="contact-email" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contact-message" class="form-label">Message</label>
+                        <textarea id="contact-message" class="form-textarea" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="social-links">
+            <a href="https://github.com/Lesleyled-tech" class="social-link" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/Lesleyled-tech" class="social-link" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="https://x.com/Less_Ledwaba" class="social-link" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="https://www.instagram.com/less_ledwaba" class="social-link" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-instagram"></i>
+            </a>
+        </div>
+        <p>© 2025 Lesley Ledwaba. All rights reserved.</p>
+        <p>Have a Project in mind? Get in touch. lledwaba02@ai.wethinkcode.co.za.</p>
+    </footer>
+
+    <script>
+        // Reusable typewriter effect function
+        function applyTypewriterEffect(container) {
+            const lines = container.querySelectorAll('.code-line');
+            let currentLine = 0;
+            
+            // Hide all lines initially
+            lines.forEach(line => line.style.display = 'none');
+            
+            function typeNextLine() {
+                if (currentLine < lines.length) {
+                    lines[currentLine].style.display = 'flex';
+                    currentLine++;
+                    setTimeout(typeNextLine, 300);
+                }
+            }
+            
+            // Start animation
+            setTimeout(typeNextLine, 300);
+        }
+
+        // Toggle terminal/section visibility with animation
+        document.querySelectorAll('.terminal-header, .section-header').forEach(header => {
+            header.addEventListener('click', function() {
+                const parent = this.parentElement;
+                const wasActive = parent.classList.contains('active');
+                
+                // Close all sections first
+                document.querySelectorAll('.terminal, .content-section').forEach(el => {
+                    el.classList.remove('active');
+                });
+                
+                // If we're opening this section (not closing it)
+                if (!wasActive) {
+                    parent.classList.add('active');
+                    
+                    // Apply typewriter effect to the content
+                    const content = parent.querySelector('.terminal-body, .section-content');
+                    if (content) {
+                        applyTypewriterEffect(content);
+                    }
+                }
+            });
+        });
+
+        // Start animation after page load
+        window.addEventListener('load', () => {
+            // Open main terminal by default and animate it
+            const mainTerminal = document.getElementById('mainTerminal');
+            mainTerminal.classList.add('active');
+            applyTypewriterEffect(mainTerminal.querySelector('.terminal-body'));
+        });
+
+        // Form submission
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your message! Will get back to soon.');
+            this.reset();
+        });
+    </script>
+</body>
+</html>
